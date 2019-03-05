@@ -3,7 +3,7 @@ Visual object tracking -- Long-term object tracking method based on background c
 
 A long-term tracking algorithm can hardly do without the help of detecting model,Here is a brief introduction of my algorithm.It can be devided into two parts,one is tracking stage,the other is re-detecting stage :
 
-TRACKING
+Tracking stage
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/tracking%20%20stage.png)
 
@@ -12,7 +12,7 @@ From the beginning we get the interest region of one frame from the groundtruth,
 During tracking stage,we also train a memory filter in the meantime,memory filter merely learns from core part of search window,we train a  scale filter based this filter.And memory filter can also check whether the tracking was success or not.If failed,the tracker will active detector.
 
 
-DETECTING
+Detecting stage
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/detecting%20stage.png)
 
@@ -22,7 +22,9 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
 
 
 
-(Besides anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
+
+(Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
+
 
 
 
