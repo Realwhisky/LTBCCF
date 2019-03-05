@@ -33,10 +33,10 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
     
 %************************************************************************************************************************************
 %************************************************************************************************************************************
-    %  CA setting
-      offset = [-target_sz(1) 0; 0 -target_sz(2); target_sz(1) 0; 0 target_sz(2)];
-    %  offset = [-target_sz(1) target_sz(2); target_sz(1) target_sz(2); -target_sz(1) -target_sz(2); target_sz(1) -target_sz(2)];
-      lambda_CA = config.lambda_CA ;
+  % CA setting
+    offset = [-target_sz(1) 0; 0 -target_sz(2); target_sz(1) 0; 0 target_sz(2)];
+  % offset = [-target_sz(1) target_sz(2); target_sz(1) target_sz(2); -target_sz(1) -target_sz(2); target_sz(1) -target_sz(2)];
+    lambda_CA = config.lambda_CA ;
 %************************************************************************************************************************************
 %************************************************************************************************************************************
 
