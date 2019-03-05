@@ -36,7 +36,7 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
     Piotr_toolbox + Vlfeat_toolbox + MatConvNet1.0-beta24 
 
 
-## EFFECT  
+## Effect  
 (a comparison with other mainstream algorithms)
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/demo_girl2.gif)
