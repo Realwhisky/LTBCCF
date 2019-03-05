@@ -2,7 +2,7 @@
 
 Visual object tracking -- Long-term object tracking method based on background constraints and convolutional features （LTBCCF）
 
-        A long-term tracking algorithm can hardly do without the help of detecting model.
+        A long-term tracking algorithm can hardly work without the help of detecting model.
         Here is a brief introduction of my algorithm.
         It can be devided into two parts,one is tracking stage,the other is re-detecting stage :
 
