@@ -1,35 +1,35 @@
 function results = run_LTBCCF(seq, res_path, bSaveImage)
 
-% Õâ¸öÊÇÓÃÀ´ÔÚOTBÉÏ²âÊÔµÄ½Ó¿Ú£»
+% è¿™ä¸ªæ˜¯ç”¨æ¥åœ¨OTBä¸Šæµ‹è¯•çš„æ¥å£ï¼›
 
     addpath('./utility');
 
     img_files = seq.s_frames;
     target_sz = [seq.init_rect(1,4), seq.init_rect(1,3)];
-	pos = [seq.init_rect(1,2), seq.init_rect(1,1)] + floor(target_sz/2);
+    pos = [seq.init_rect(1,2), seq.init_rect(1,1)] + floor(target_sz/2);
     
 %***************************************************************************************************************        
-    config.s_num_compressed_dim = 'MAX';  % ³ß¶ÈÂË²¨Æ÷½µÎ¬£¬ÔÚ³ÌĞòÖĞ½µÎª nscales == 17    
+    config.s_num_compressed_dim = 'MAX';  % å°ºåº¦æ»¤æ³¢å™¨é™ç»´ï¼Œåœ¨ç¨‹åºä¸­é™ä¸º nscales == 17    
 	
-	config.padding =1.86;                 
-    config.cnnpaddingrate = 2.5;          % =1¼Èpadding=1.86, =1.35¼Èpadding=2.5, =1.5¼Èpadding=2.8
+    config.padding =1.86;                 
+    config.cnnpaddingrate = 2.5;          % =1æ—¢padding=1.86, =1.35æ—¢padding=2.5, =1.5æ—¢padding=2.8
     
     config.kernel_sigma=1;
-	config.lambda = 1e-4;                 % ÕıÔò²ÎÊı  
-	config.output_sigma_factor=0.1;       % 
+    config.lambda = 1e-4;                 % æ­£åˆ™å‚æ•°  
+    config.output_sigma_factor=0.1;       % 
     config.output_sigma_factorcn=1/16;
     config.scale_sigma_factor=1/16;       % 1/16
     config.sigmacn = 0.2;
     
     config.interp_factorCNN = 0.02;
     config.interp_factor=0.01;            % best 0.01
-    config.interp_factor_a=0.01;          % ×¨ÃÅ ¸øÑ§Ï°ÂË²¨Æ÷µÄ 
-    config.compressed_dimcn = 8;          % ÑÕÉ«ÌØÕ÷  ½µÎ¬  ¡­¡­¡­¡­¡­¡­¡­¡­¡­¡­¡­¡­¡­
-    config.num_compressed_dim=18;         % Æ½ÒÆÂË²¨Æ÷½µÎ¬Ñ¹Ëõ (ÈÚºÏÁË±ğµÄÌØÕ÷ĞèÒª×¢Òâ)
-    config.num_compressed_dim_app=18;     % Ñ§Ï°ÂË²¨Æ÷Î¬¶È½µÎ¬  ¡­¡­¡­¡­¡­¡­¡­¡­¡­¡­¡­  
+    config.interp_factor_a=0.01;          % ä¸“é—¨ ç»™å­¦ä¹ æ»¤æ³¢å™¨çš„ 
+    config.compressed_dimcn = 8;          % é¢œè‰²ç‰¹å¾  é™ç»´  â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦
+    config.num_compressed_dim=18;         % å¹³ç§»æ»¤æ³¢å™¨é™ç»´å‹ç¼© (èåˆäº†åˆ«çš„ç‰¹å¾éœ€è¦æ³¨æ„)
+    config.num_compressed_dim_app=18;     % å­¦ä¹ æ»¤æ³¢å™¨ç»´åº¦é™ç»´  â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦â€¦  
     
     config.num_compressed_dimnn512=64;
-    config.num_compressed_dimnn512=64;    % Éî¶ÈÑ§Ï°ÌØÕ÷½µÎ¬ *************
+    config.num_compressed_dimnn512=64;    % æ·±åº¦å­¦ä¹ ç‰¹å¾é™ç»´ *************
     config.num_compressed_dimnn256=32;
     
     config.features.hog_orientations=9;   
@@ -37,12 +37,12 @@ function results = run_LTBCCF(seq, res_path, bSaveImage)
     config.features.window_size=6;        
     config.features.nbins=8;             
     
-    config.scale_step=1.02;               % ³ß¶È´óĞ¡µ÷Õû
-    config.number_of_scales=17;           % ×Ô¼ºadd£¬Ò²¾ÍÊÇ³ÌĞòÀïµÄnScales=config.number_of_scales;
-    config.number_of_interp_scales=45;    % ×Ô¼ºadd                               
+    config.scale_step=1.02;               % å°ºåº¦å¤§å°è°ƒæ•´
+    config.number_of_scales=17;           % è‡ªå·±addï¼Œä¹Ÿå°±æ˜¯ç¨‹åºé‡Œçš„nScales=config.number_of_scales;
+    config.number_of_interp_scales=45;    % è‡ªå·±add                               
     
-    config.motion_thresh=0.22;            % Ñ§Ï°ÂË²¨Æ÷¼¤·¢¼ì²â»·½ÚÊ±ãĞÖµ
-    config.appearance_thresh=0.75;        % Ñ§Ï°ÂË²¨Æ÷¸üĞÂãĞÖµ
+    config.motion_thresh=0.22;            % å­¦ä¹ æ»¤æ³¢å™¨æ¿€å‘æ£€æµ‹ç¯èŠ‚æ—¶é˜ˆå€¼
+    config.appearance_thresh=0.75;        % å­¦ä¹ æ»¤æ³¢å™¨æ›´æ–°é˜ˆå€¼
     config.CNNdect_update_thresh=0.5;     
 %***************************************************************************************************************     
 
@@ -51,7 +51,7 @@ function results = run_LTBCCF(seq, res_path, bSaveImage)
     video_path='';
     video = seq.name;
     [positions, time] = tracker_lct(video, video_path, img_files, pos, target_sz, config, show_visualization);
-    %¸øbenchmark,·µ»Øvariable½á¹û
+    %ç»™benchmark,è¿”å›variableç»“æœ
     rects = [positions(:,2) - target_sz(2)/2, positions(:,1) - target_sz(1)/2];
     rects(:,3) = target_sz(2);
     rects(:,4) = target_sz(1);
