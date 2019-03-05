@@ -1,9 +1,10 @@
-# LTBCCF_algorithm
+# LTBCCF
+
 Visual object tracking -- Long-term object tracking method based on background constraints and convolutional features （LTBCCF）
 
-A long-term tracking algorithm can hardly do without the help of detecting model,Here is a brief introduction of my algorithm.It can be devided into two parts,one is tracking stage,the other is re-detecting stage :
+A long-term tracking algorithm can hardly do without the help of detecting model.Here is a brief introduction of my algorithm.It can be devided into two parts,one is tracking stage,the other is re-detecting stage :
 
-Tracking stage
+## Tracking stage
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/tracking%20%20stage.png)
 
@@ -12,7 +13,7 @@ From the beginning we get the interest region of one frame from the groundtruth,
 During tracking stage,we also train a memory filter in the meantime,memory filter merely learns from core part of search window,we train a  scale filter based this filter.And memory filter can also check whether the tracking was success or not.If failed,the tracker will active detector.
 
 
-Detecting stage
+## Detecting stage
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/detecting%20stage.png)
 
@@ -26,14 +27,21 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
 (Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
 
 
+## Platform
+
+Intel i5-8300H
+8 GB DDR4
+Nvidia GeForce GTX 1060
+VS2013 + Mattlab2016a + Cuda7.5
+Piotr_toolbox + Vlfeat_toolbox + MatConvNet1.0-beta24
 
 
-EFFECT (a comparison with other mainstream algorithms)
+## EFFECT (a comparison with other mainstream algorithms)
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/demo_girl2.gif)
 
 
-Conclusion
+## Conclusion
 
 
 A long-term target tracking method, based on background constraints and convolutional fea-tures(LTBCCF), is proposed to solve the target loss problem caused by background aliasing and oc-clusion in long-term object tracking.Firstly, the feature of input image is fused and dimensionally reduced to enhance the performance of target feature discrimination and reduce the complexity of feature computation. Secondly, background constraints are introduced into the filter training process, which makes the filter more focused on the target response to improve the anti-jamming ability. Finally, by setting memory filter and the Peak to Sidelobe Ratio detection, the tracker can judge whether the target is missing or not. If the target is lost, a convolutional features filter is introduced to re-detect the target. The experimental results on 50 video sequences of Visual Tracking Benchmark dataset show that the proposed algorithm achieves a total accuracy score of 92.1% and a total success rate of 63.6% in complex scenes such as background aliasing, fast motion and severe occlusion. It is superior to most existing tracking algorithms and has a long time robust tracking effect.
