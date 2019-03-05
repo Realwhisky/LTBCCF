@@ -1,39 +1,39 @@
 
 function feat = get_CNNfeatures(im, cos_window, layers)
 
-global net               % È«¾Öµ÷ÓÃ
-global enableGPU         % È«¾Öµ÷ÓÃ
+global net               % å…¨å±€è°ƒç”¨
+global enableGPU         % å…¨å±€è°ƒç”¨
 
-if isempty(net)          % netÈôÎª¿Õ£¬Ôò
-    initial_net();       % ÊäÈëÎª¿Õ
+if isempty(net)          % netè‹¥ä¸ºç©ºï¼Œåˆ™
+    initial_net();       % è¾“å…¥ä¸ºç©º
 end
 
 sz_window = size(cos_window);
 
-% Preprocessing*******************¹Ù·½½éÉÜµÄÍ¼Æ¬¶ÁÈ¡´¦Àí²½Öè**********************************************************
+% Preprocessing*******************å®˜æ–¹ä»‹ç»çš„å›¾ç‰‡è¯»å–å¤„ç†æ­¥éª¤**********************************************************
 
-img = single(im);        % note: [0, 255] range        imgÎªµ¥¾«¶ÈÊı×é£¬·¶Î§0~255
+img = single(im);        % note: [0, 255] range     imgä¸ºå•ç²¾åº¦æ•°ç»„ï¼ŒèŒƒå›´0~255
 
-img = imResample(img, net.meta.normalization.imageSize(1:2));  % ¹Ù·½½éÉÜµÄÍ¼Æ¬¶ÁÈ¡´¦Àí²½Öè£¬ÊÇim = imresize();
+img = imResample(img, net.meta.normalization.imageSize(1:2));  % å®˜æ–¹ä»‹ç»çš„å›¾ç‰‡è¯»å–å¤„ç†æ­¥éª¤ï¼Œæ˜¯im = imresize();
 
-average=net.meta.normalization.averageImage;        % ÑµÁ·Êı¾İµÄ¾ùÖµ
+average=net.meta.normalization.averageImage;        % è®­ç»ƒæ•°æ®çš„å‡å€¼
 
 % ******************************************************************************************************************
-if numel(average)==3                                % Êı×éÔªËØÊıÄ¿Îª3
-    average=reshape(average,1,1,3);                 % ÈıÍ¨µÀÊäÈë
+if numel(average)==3                                % æ•°ç»„å…ƒç´ æ•°ç›®ä¸º3
+    average=reshape(average,1,1,3);                 % ä¸‰é€šé“è¾“å…¥
 end
 
-img = bsxfun(@minus, img, average);                 % Í¼Ïñ¾ùÖµ¹éÒ»»¯£¬Ã¿¸öÏñËØµã¼õÈ¥¸ÃÍ¨µÀ¾ùÖµ
+img = bsxfun(@minus, img, average);                 % å›¾åƒå‡å€¼å½’ä¸€åŒ–ï¼Œæ¯ä¸ªåƒç´ ç‚¹å‡å»è¯¥é€šé“å‡å€¼
 
 if enableGPU, img = gpuArray(img); end
 
 % Run the CNN
 res = vl_simplenn(net,img);                         
 
-% ¿ªÊ¼Ê¹ÓÃCNNÍøÂç ¶ÁÈ¡Í¼Æ¬
+% å¼€å§‹ä½¿ç”¨CNNç½‘ç»œ è¯»å–å›¾ç‰‡
 
-% Initialize feature maps                           % ³õÊ¼»¯ÌØÕ÷Í¼Ó³Éä
-feat = cell(length(layers), 1);                     % feat ÓÃÀ´´æ´¢ÌØÕ÷Ó³ÉälayersµÄcells = length(layers)*1 µÄ´óĞ¡
+% Initialize feature maps                           % åˆå§‹åŒ–ç‰¹å¾å›¾æ˜ å°„
+feat = cell(length(layers), 1);                     % feat ç”¨æ¥å­˜å‚¨ç‰¹å¾æ˜ å°„layersçš„cells = length(layers)*1 çš„å¤§å°
 
 for ii = 1:length(layers)
     
@@ -44,14 +44,14 @@ for ii = 1:length(layers)
         x = res(layers(ii)).x;
     end
     
-    x = imResample(x, sz_window(1:2));       % size_windowÊÇcos´°´óĞ¡£¬°ÑÄ³Ò»²ã¾í»ıµÄÌØÕ÷Ó³ÉäÊä³öresize³É cos´°Ò»ÑùµÄ´óĞ¡
-                                             % ÕâÀï°ÑÄ³Ò»²ã¾í»ıÌØÕ÷²åÖµ³Écos´°´óĞ¡
+    x = imResample(x, sz_window(1:2));       % size_windowæ˜¯cosçª—å¤§å°ï¼ŒæŠŠæŸä¸€å±‚å·ç§¯çš„ç‰¹å¾æ˜ å°„è¾“å‡ºresizeæˆ cosçª—ä¸€æ ·çš„å¤§å°
+                                             % è¿™é‡ŒæŠŠæŸä¸€å±‚å·ç§¯ç‰¹å¾æ’å€¼æˆcosçª—å¤§å°
     % windowing technique
     if ~isempty(cos_window),
-        x = bsxfun(@times, x, cos_window);   % È»ºóÌØÕ÷Í¼Ó³Éä ×÷ cos´°´¦Àí
+        x = bsxfun(@times, x, cos_window);   % ç„¶åç‰¹å¾å›¾æ˜ å°„ ä½œ cosçª—å¤„ç†
     end
     
-    feat{ii}=x;                              % Ó³ÉäºóµÄÖµ·µ»Ø fear{ii} ²ã
+    feat{ii}=x;                              % æ˜ å°„åçš„å€¼è¿”å› fear{ii} å±‚
 end
    % feat{3}
 end
