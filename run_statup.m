@@ -1,9 +1,9 @@
 
-% Õâ¸öÊÇÔËĞĞËã·¨Ç°¼ÓÔØµÄ¹¤¾ßÏäÒÔ¼°MatconvnetµÄ±àÒë
+% è¿™ä¸ªæ˜¯è¿è¡Œç®—æ³•å‰åŠ è½½çš„å·¥å…·ç®±ä»¥åŠMatconvnetçš„ç¼–è¯‘
 
-run('D:\ÊÓ¾õÄ¿±ê¸ú×ÙÊµÑé2018\Ä¿±ê¸ú×ÙËã·¨2018\LTBCCF\vlfeat-0.9.20\toolbox\vl_setup')
-run('D:\ÊÓ¾õÄ¿±ê¸ú×ÙÊµÑé2018\Ä¿±ê¸ú×ÙËã·¨2018\LTBCCF\external\matconvnet\matlab\vl_setupnn')
-run('D:\ÊÓ¾õÄ¿±ê¸ú×ÙÊµÑé2018\Ä¿±ê¸ú×ÙËã·¨2018\LTBCCF\external\matconvnet\matlab\vl_compilenn')
+run('D:\è§†è§‰ç›®æ ‡è·Ÿè¸ªå®éªŒ2018\ç›®æ ‡è·Ÿè¸ªç®—æ³•2018\LTBCCF\vlfeat-0.9.20\toolbox\vl_setup')
+run('D:\è§†è§‰ç›®æ ‡è·Ÿè¸ªå®éªŒ2018\ç›®æ ‡è·Ÿè¸ªç®—æ³•2018\LTBCCF\external\matconvnet\matlab\vl_setupnn')
+run('D:\è§†è§‰ç›®æ ‡è·Ÿè¸ªå®éªŒ2018\ç›®æ ‡è·Ÿè¸ªç®—æ³•2018\LTBCCF\external\matconvnet\matlab\vl_compilenn')
 
 % vl_compilenn('enablegpu',true)
 % vl_compilenn('enableGpu', true, 'cudaRoot', 'C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v7.5')
