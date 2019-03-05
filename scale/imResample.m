@@ -27,7 +27,7 @@ function B = imResample( A, scale, method, norm )
 %  tic, for i=1:n, I2=imResample(I,s,method); end; toc
 %  figure(1); im(I1); figure(2); im(I2);
 %
-% See also imresize
+%  See also imresize
 %
 % Piotr's Computer Vision Matlab Toolbox      Version 3.24
 % Copyright 2014 Piotr Dollar.  [pdollar-at-gmail.com]
