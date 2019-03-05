@@ -1,6 +1,6 @@
 function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, target_sz, config, show_visualization)
 
-	resize_image = (sqrt(prod(target_sz)) >= 100);  
+    resize_image = (sqrt(prod(target_sz)) >= 100);  
     
     if resize_image,
         pos = floor(pos / 2);
@@ -10,26 +10,26 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
     im_sz=size(imread([video_path img_files{1}]));
     [window_sz, app_sz]=search_window(target_sz,im_sz, config);   
    
-%*********************************************************²ÎÊı³õÊ¼»¯******************************************************************    
+%*********************************************************å‚æ•°åˆå§‹åŒ–******************************************************************    
 %************************************************************************************************************************************   
     cell_size=config.features.cell_size;       % cell_size = 4;
-    interp_factor=config.interp_factor;        % interp_factor = 0.012  ×¢Òâ²»ÊÇ0.01
-    interp_factor_a=config.interp_factor_a;    % interp_factor_a = 0.01,Ñ§Ï°ÂË²¨Æ÷Ñ§Ï°ÂÊ
+    interp_factor=config.interp_factor;        % interp_factor = 0.012  æ³¨æ„ä¸æ˜¯0.01
+    interp_factor_a=config.interp_factor_a;    % interp_factor_a = 0.01,å­¦ä¹ æ»¤æ³¢å™¨å­¦ä¹ ç‡
     
     currentScaleFactor = 1;
     interpolate_response = 1; 
     refinement_iterations=1;
-    featureRatio = 4;                                                       % Êµ¼ÊÉÏ¾ÍÊÇcell_size
-    base_target_sz = target_sz / currentScaleFactor;                        % ÉèÖÃÄ¿±ê¸ßË¹ÏìÓ¦yµÄsigma_factor
+    featureRatio = 4;                                                       % å®é™…ä¸Šå°±æ˜¯cell_size
+    base_target_sz = target_sz / currentScaleFactor;                        % è®¾ç½®ç›®æ ‡é«˜æ–¯å“åº”yçš„sigma_factor
        
     cos_window_move = single(hann(floor(window_sz(1)/featureRatio))*hann(floor(window_sz(2)/featureRatio))' ); 
     cos_window_app = single(hann(floor(app_sz(1)/featureRatio))*hann(floor(app_sz(2)/featureRatio))' ); 
 
-    projection_matrix = [];                                                 % Î»ÒÆÂË²¨Æ÷Í¶Ó°¾ØÕó
-    projection_matrix_a = [];                                               % Ñ§Ï°ÂË²¨Æ÷Í¶Ó°¾ØÕó
-    num_compressed_dimcn = config.compressed_dimcn ;                        % ÑÕÉ«½µÎ¬
-    num_compressed_dim = config.num_compressed_dim;                         % Î»ÒÆ½µÎ¬
-    num_compressed_dim_app = config.num_compressed_dim_app;                 % Ñ§Ï°½µÎ¬      
+    projection_matrix = [];                                                 % ä½ç§»æ»¤æ³¢å™¨æŠ•å½±çŸ©é˜µ
+    projection_matrix_a = [];                                               % å­¦ä¹ æ»¤æ³¢å™¨æŠ•å½±çŸ©é˜µ
+    num_compressed_dimcn = config.compressed_dimcn ;                        % é¢œè‰²é™ç»´
+    num_compressed_dim = config.num_compressed_dim;                         % ä½ç§»é™ç»´
+    num_compressed_dim_app = config.num_compressed_dim_app;                 % å­¦ä¹ é™ç»´      
     
 %************************************************************************************************************************************
 %************************************************************************************************************************************
@@ -39,23 +39,26 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
       lambda_CA = config.lambda_CA ;
 %************************************************************************************************************************************
 %************************************************************************************************************************************
+
     output_sigma_factor = config.output_sigma_factor;
     output_sigma = sqrt(prod(floor(base_target_sz/featureRatio))) * output_sigma_factor;         
     cos_window_sz = floor(window_sz/featureRatio);     
-    rg = circshift(-floor((cos_window_sz(1)-1)/2):ceil((cos_window_sz(1)-1)/2), [0 -floor((cos_window_sz(1)-1)/2)]);  % ĞŞ¸ÄÌí¼Ó 
-    cg = circshift(-floor((cos_window_sz(2)-1)/2):ceil((cos_window_sz(2)-1)/2), [0 -floor((cos_window_sz(2)-1)/2)]);  % ĞŞ¸ÄÌí¼Ó
-    [rs, cs] = ndgrid( rg,cg);                                                                             
-    y = exp(-0.5 * (((rs.^2 + cs.^2) / output_sigma^2)));                                        % Îª²åÖµÏìÓ¦×ö×¼±¸
-	yf = fft2(gaussian_shaped_labels(output_sigma, floor(window_sz / cell_size)));               % HOGÌØÕ÷ ÌìÈ»½µµÍ·Ö±æÂÊ	                                                                                   
-	cos_window = hann(size(yf,1)) * hann(size(yf,2))';	 
+    rg = circshift(-floor((cos_window_sz(1)-1)/2):ceil((cos_window_sz(1)-1)/2), [0 -floor((cos_window_sz(1)-1)/2)]);  % ä¿®æ”¹æ·»åŠ  
+    cg = circshift(-floor((cos_window_sz(2)-1)/2):ceil((cos_window_sz(2)-1)/2), [0 -floor((cos_window_sz(2)-1)/2)]);  % ä¿®æ”¹æ·»åŠ 
+    [rs, cs] = ndgrid( rg,cg);           
+    
+    y = exp(-0.5 * (((rs.^2 + cs.^2) / output_sigma^2)));                                        % ä¸ºæ’å€¼å“åº”åšå‡†å¤‡
+    yf = fft2(gaussian_shaped_labels(output_sigma, floor(window_sz / cell_size)));               % HOGç‰¹å¾ä¼šé™ä½åˆ†è¾¨ç‡	                                                                                   
+    cos_window = hann(size(yf,1)) * hann(size(yf,2))';	 
     app_yf=fft2(gaussian_shaped_labels(output_sigma, floor(app_sz / cell_size)));   
     cos_app_window = hann(size(app_yf,1)) * hann(size(app_yf,2))'; 
+    
 %************************************************************************************************************************************       
-    interp_sz = size(y) * featureRatio;                                                          % ÏÂÃæ²åÖµÑ°ÕÒÏìÓ¦Î»ÖÃµÄÖØÒªÉèÖÃ
+    interp_sz = size(y) * featureRatio;                                                          % ä¸‹é¢æ’å€¼å¯»æ‰¾å“åº”ä½ç½®çš„é‡è¦è®¾ç½®
 %************************************************************************************************************************************
-    nScales=config.number_of_scales;                   % ×¢Òâ³ß¶È´ø¿íscale_sigma = nScales/sqrt(33) * scale_sigma_factorÊÇ
-                                                       % ºÍ×Ô¼ºÉèÖÃµÄ²ÎÊıÓĞ¹ØµÄ                                                                                      
-    nScalesInterp=config.number_of_interp_scales;      % Ğ´ÔÚÕâÀï·½±ãµ÷²Î
+    nScales=config.number_of_scales;                   % æ³¨æ„å°ºåº¦å¸¦å®½scale_sigma = nScales/sqrt(33) * scale_sigma_factoræ˜¯
+                                                       % å’Œè‡ªå·±è®¾ç½®çš„å‚æ•°æœ‰å…³çš„                                                                                      
+    nScalesInterp=config.number_of_interp_scales;      % å†™åœ¨è¿™é‡Œæ–¹ä¾¿è°ƒå‚
     scale_sigma_factor=config.scale_sigma_factor;      % scale_sigma_factor=1/4;               
     
     scale_sigma =nScalesInterp * scale_sigma_factor;    
@@ -63,10 +66,10 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
     scale_exp_shift = circshift(scale_exp, [0 -floor((nScales-1)/2)]);
     interp_scale_exp = -floor((nScalesInterp-1)/2):ceil((nScalesInterp-1)/2);
     interp_scale_exp_shift = circshift(interp_scale_exp, [0 -floor((nScalesInterp-1)/2)]);
-    scale_step = config.scale_step;                                          % ÊÖ¶¯Ö±½ÓÌí¼ÓµÄ²ÎÊı
+    scale_step = config.scale_step;                                          % æ‰‹åŠ¨ç›´æ¥æ·»åŠ çš„å‚æ•°
     scaleFactors = scale_step .^ scale_exp;
     interpScaleFactors = scale_step .^ interp_scale_exp_shift;
-    ys = exp(-0.5 * (scale_exp_shift.^2) /scale_sigma^2);                    % Ò»Î¬µÄ ³ß¶ÈÄ¿±êº¯Êı
+    ys = exp(-0.5 * (scale_exp_shift.^2) /scale_sigma^2);                    % ä¸€ç»´çš„ å°ºåº¦ç›®æ ‡å‡½æ•°
     ysf = single(fft(ys));
     scale_window = single(hann(size(ysf,2)))';
         scale_model_max_area = 512;
@@ -83,24 +86,23 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
     if max_scale_dim                                                 % add
         s_num_compressed_dim = length(scaleFactors);                 % add  
     else                                                             % add
-        s_num_compressed_dim = config.s_num_compressed_dim;          % add ²»ÊÇMAX£¬ÄÇ¾ÍÊÇ×Ô¼º¶¨ÒåµÄ½µÎ¬Î¬¶È£»
+        s_num_compressed_dim = config.s_num_compressed_dim;          % add ä¸æ˜¯MAXï¼Œé‚£å°±æ˜¯è‡ªå·±å®šä¹‰çš„é™ç»´ç»´åº¦ï¼›
     end   
 %*******************************************************************************************************************************************
     config.window_sz=window_sz;
-    config.app_sz=app_sz;                                                    %£¨ÓÃÓÚĞŞ¸ÄºóµÄapp_filterÀïµÄ²ÎÊı£©
+    config.app_sz=app_sz;                                                     %ï¼ˆç”¨äºä¿®æ”¹åçš„app_filteré‡Œçš„å‚æ•°ï¼‰
     config.detc=det_config(target_sz, im_sz);
     config.y = y;                       
-%*****************************************************************ÑÕÉ«ÌØÕ÷²ÎÊıÉèÖÃ********************************************************
+%*****************************************************************é¢œè‰²ç‰¹å¾å‚æ•°è®¾ç½®********************************************************
     temp = load('w2crs');
-    w2c = temp.w2crs;                                                         % ºóÃæÌáÈ¡ÌØÕ÷µ÷ÓÃ
-    window_szcn = floor(window_sz/4)*4;                                       % ĞŞ¸´ÏìÓ¦size´óĞ¡ÎÊÌâ£¬ÎªÁËÓëHOGsizeÏàÆ¥Åä
+    w2c = temp.w2crs;                                                         % åé¢æå–ç‰¹å¾è°ƒç”¨
+    window_szcn = floor(window_sz/4)*4;                                       % ä¿®å¤å“åº”sizeå¤§å°é—®é¢˜ï¼Œä¸ºäº†ä¸HOGsizeç›¸åŒ¹é…
     output_sigma_factorcn = config.output_sigma_factorcn;
     output_sigmacn = sqrt(prod(target_sz)) * output_sigma_factorcn;
     ycnf = fft2(gaussian_shaped_labels(output_sigmacn, floor(window_szcn)));    
     cos_window_cn = single(hann(window_szcn(1)) * hann(window_szcn(2))');
     sigmacn = config.sigmacn;
-%$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
-%*******************************************************************Éî¶ÈÌØÕ÷²ÎÊıÉèÖÃ*********************************************************
+%*******************************************************************æ·±åº¦ç‰¹å¾å‚æ•°è®¾ç½®*********************************************************
     interp_factorCNN = config.interp_factorCNN;
     
     indLayers = [37, 28, 19];
@@ -154,10 +156,10 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                  im_gray=im;
               end
         
-   	          if ismatrix(im)                         % È·¶¨ÊäÈëÊÇ·ñÎª¾ØÕó
-                 imCNN = cat(3, im, im, im);          % Èç¹ûÊÇ»Ò¶ÈÍ¼£¬¾Í¸´ÖÆ³ÉÈıÍ¨µÀµÄ &&&&&&
+   	          if ismatrix(im)                         % ç¡®å®šè¾“å…¥æ˜¯å¦ä¸ºçŸ©é˜µ
+                 imCNN = cat(3, im, im, im);          % å¦‚æœæ˜¯ç°åº¦å›¾ï¼Œå°±å¤åˆ¶æˆä¸‰é€šé“çš„ &&&&&&
               else
-                 imCNN = im;                          % Èç¹ûÊÇ²ÊÉ«Í¼£¬±£³Ö
+                 imCNN = im;                          % å¦‚æœæ˜¯å½©è‰²å›¾ï¼Œä¿æŒ
               end
         
               if resize_image 
@@ -176,14 +178,14 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                [xt_npca, xt_pca] = get_move_subwindow_ensemble(im, pos, window_sz, currentScaleFactor);
                xt = feature_projection(xt_npca, xt_pca, projection_matrix, cos_window_move);
                xtf = fft2(xt);
-               responsefHOG = sum(hf_num .* xtf, 3) ./ (hf_den );           % HOGÏìÓ¦   %+ lambda
+               responsefHOG = sum(hf_num .* xtf, 3) ./ (hf_den );                    % HOGå“åº”   %+ lambda
 %************************************************************************************************************************************              
                zcn=  feature_projection( cn_num_npca , cn_num_pca, projection_matrixcn, cos_window_cn);
                [out_ncn, out_cn] = get_colorextract(im, pos, window_szcn, currentScaleFactor, w2c);
                xcn = feature_projection( out_ncn , out_cn, projection_matrixcn, cos_window_cn);
 
                kf = fft2(dense_gauss_kernel(sigmacn, xcn, zcn));
-               responseCN = real(ifft2(alphaf_num .* kf ./ alphaf_den));               % ÑÕÉ«ÏìÓ¦
+               responseCN = real(ifft2(alphaf_num .* kf ./ alphaf_den));             % é¢œè‰²å“åº”
 %************************************************************************************************************************************
                if interpolate_response > 0
                   if interpolate_response == 2
@@ -192,10 +194,10 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                   end
                      responsefHOG = resizeDFT2(responsefHOG, interp_sz);
                end
-                     responseHOG = ifft2(responsefHOG, 'symmetric');               % ¹éÒ»»¯HOGÌØÕ÷
+                     responseHOG = ifft2(responsefHOG, 'symmetric');                % å½’ä¸€åŒ–HOGç‰¹å¾
                      
 %************************************************************************************************************************************                    
-                     response = 1 * (responseHOG * 0.75 + responseCN * 0.25) ;        % ¼ÓÈ¨×îÖÕÏìÓ¦
+                     response = 1 * (responseHOG * 0.75 + responseCN * 0.25) ;      % åŠ æƒæœ€ç»ˆå“åº”
 %************************************************************************************************************************************                     
                      response_sz = size(response);
                      response_visual = zeros((response_sz));
@@ -218,7 +220,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                            case 0
                                translation_vec = round([disp_row, disp_col] * featureRatio * currentScaleFactor);
                            case 1
-                               translation_vec = round([disp_row, disp_col] * currentScaleFactor);   % ¼ÆËãÊ±resizeÁËÍ¼Æ¬£¬È»ºó*rateÁË£¬ÏÖÔÚ±ä»ØÈ¥
+                               translation_vec = round([disp_row, disp_col] * currentScaleFactor);   % è®¡ç®—æ—¶resizeäº†å›¾ç‰‡ï¼Œç„¶å*rateäº†ï¼Œç°åœ¨å˜å›å»
                            case 2
                                translation_vec = [disp_row, disp_col];
                      end
@@ -229,7 +231,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                end   
                
                
-               if  nScales > 0         % Ç°ÃæÏÈ¼ÆËãÎ»ÖÃÏìÓ¦£¬ÕâÀïÔÙ¼ÆËã³ß¶È±ä»¯ £»
+               if  nScales > 0         % å‰é¢å…ˆè®¡ç®—ä½ç½®å“åº”ï¼Œè¿™é‡Œå†è®¡ç®—å°ºåº¦å˜åŒ– ï¼›
                    [~,responseapp, max_response]=do_app_correlation(im_gray, pos, app_sz, config, app_model, projection_matrix_a, cos_window_app, currentScaleFactor);
                     config.max_response=max_response; 
 %************************************************************************************************************************************           
@@ -247,7 +249,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
 %                      averg  = mean (interestapp(:));
 %                      PSRapp = maxresponseapp/averg;
 %************************************************************************************************************************************                     
-                   judge_a = strcmp(video,'Soccer');                         % just for test (ÌØÊâĞòÁĞ)
+                   judge_a = strcmp(video,'Soccer');                         % just for test (ç‰¹æ®Šåºåˆ—)
                    judge_b = strcmp(video,'jogging-1_1');
                    judge_c = strcmp(video,'jogging-2_1');
                    judge_d = strcmp(video,'Singer2_1');
@@ -268,7 +270,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                 
                 maxresponseMIX = min(max_response,maxresponseHOGCN);
                 
-%*************************************CNNÖØ¼ì²â¼¤»î***************************************************************************************
+%*************************************CNNé‡æ£€æµ‹æ¿€æ´»***************************************************************************************
                   %  if max_response<config.motion_thresh
                     if maxresponseHOGCN<motion_thresh,
                        [pos, max_responseCNN]=refine_pos_cnn(imCNN, pos, indLayers, nweights, CNNpadwindow_sz, cos_windowCNNpad, CNNf_num, CNNfenmu_den,...
@@ -290,8 +292,8 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                   [xs_pca, xs_npca] = get_scale_subwindow(im_gray,pos,app_sz,currentScaleFactor*scaleFactors,scale_model_sz); 
                    xs = feature_projection_scale(xs_npca,xs_pca,scale_basis,scale_window);
                    xsf = fft(xs,[],2);
-                  scale_responsef = sum(sf_num .* xsf, 1) ./ (sf_den + lambda);                         %add
-                  interp_scale_response = ifft(resizeDFT(scale_responsef, nScalesInterp), 'symmetric');       %add³ß¶ÈÏìÓ¦Í¼²åÖµ»ØÉèÖÃµÄ33¸ö³ß¶È
+                  scale_responsef = sum(sf_num .* xsf, 1) ./ (sf_den + lambda);                               %add
+                  interp_scale_response = ifft(resizeDFT(scale_responsef, nScalesInterp), 'symmetric');       %addå°ºåº¦å“åº”å›¾æ’å€¼å›è®¾ç½®çš„33ä¸ªå°ºåº¦
                   recovered_scale_index = find(interp_scale_response == max(interp_scale_response(:)), 1);    %add
                   currentScaleFactor = currentScaleFactor * interpScaleFactors(recovered_scale_index);        %add
                   
@@ -304,7 +306,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
           end    
 %*******************************************************************************************************************************************
 %*******************************************************************************************************************************************
-%***************************************************************Î»ÖÃÂË²¨Æ÷******************************************************************
+%***************************************************************ä½ç½®æ»¤æ³¢å™¨******************************************************************
  
        [xl_npca, xl_pca] = get_move_subwindow_ensemble(im_gray, pos, window_sz, currentScaleFactor);
     
@@ -331,7 +333,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
 %            kfn_CA = zeros([size(xlf) length(offset)]);
 %                for j=1:length(offset)
 %                % obtain a subwindow close to target for regression to 0 
-%                % ÑµÁ·±³¾°ĞÅÏ¢Ê¹ÆäÏìÓ¦Îª 0
+%                % è®­ç»ƒèƒŒæ™¯ä¿¡æ¯ä½¿å…¶å“åº”ä¸º 0
 %                   [xf_npca, xf_pca] = get_move_subwindow_ensemble(im_gray, pos + offset(j,:), window_sz, currentScaleFactor);
 %                   data_matrix_CA = xf_pca;    
 %                   [pca_basis_CA, ~, ~] = svd(data_matrix_CA' * data_matrix_CA);
@@ -343,11 +345,11 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
 
 
         new_hf_den = sum(xlf .* conj(xlf),3)+ lambda;       %  + lambda_CA.*sum(kfn_CA,4)) 
-%         Awf = real(hf_num(:,:,1)./new_hf_den);
-%         Awf = mexResize(Awf, window_sz, 'auto');        
+%       Awf = real(hf_num(:,:,1)./new_hf_den);
+%       Awf = mexResize(Awf, window_sz, 'auto');        
         
         
-%**********************************************ÑÕÉ«ÂË²¨Æ÷*****************************************************************************
+%**********************************************é¢œè‰²æ»¤æ³¢å™¨*****************************************************************************
 
        [out_ncn, out_cn] = get_colorextract(im, pos, window_szcn, currentScaleFactor, w2c);
      
@@ -369,11 +371,11 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
           %x = feature_projection(xo_npca, xo_pca, projection_matrix, cos_window);
         xcn = feature_projection( out_ncn , out_cn, projection_matrixcn, cos_window_cn);
           % calculate the new classifier coefficients
-        kf = fft2(dense_gauss_kernel(sigmacn, xcn));    % CN´úÂëÉèÖÃµÄ0.2
+        kf = fft2(dense_gauss_kernel(sigmacn, xcn));                       % CNä»£ç =0.2
         new_alphaf_num = ycnf .* kf;
         new_alphaf_den = kf .* (kf + lambda);
 
-%*********************************************³ß¶ÈÂË²¨Æ÷*******************************************************************************
+%*********************************************å°ºåº¦æ»¤æ³¢å™¨*******************************************************************************
 
       if nScales > 0         
         
@@ -389,7 +391,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
          bigY_den = xs_pca;
         
            if max_scale_dim
-              [scale_basis, ~] = qr(bigY, 0);                          % Ö»ÇóÍ¶Ó°¾ØÕó Q
+              [scale_basis, ~] = qr(bigY, 0);                          % åªæ±‚æŠ•å½±çŸ©é˜µ Q
               [scale_basis_den, ~] = qr(bigY_den, 0);
            else
               [U,~,~] = svd(bigY,'econ');
@@ -405,7 +407,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
          new_sf_den = sum(xsf .* conj(xsf),1);
         
       end   
-%*********************************************Ñ§Ï°¼ÇÒäÂË²¨Æ÷***************************************************************************
+%*********************************************å­¦ä¹ è®°å¿†æ»¤æ³¢å™¨***************************************************************************
 
         [xa_npca, xa_pca] = get_move_subwindow_learn(im_gray, pos, app_sz, currentScaleFactor);     
     
@@ -429,18 +431,18 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
     
          xlf_a = fft2(feature_projection(xa_npca, xa_pca, projection_matrix_a, cos_app_window));
          app_hf_den = sum(xlf_a .* conj(xlf_a), 3);
-%*********************************************Éî¶ÈÌØÕ÷×÷¼ì²â*************************************************************************
+%*********************************************æ·±åº¦ç‰¹å¾ä½œæ£€æµ‹*************************************************************************
 
             if judge_tip == 1
                     
                     feat = extractFeature(imCNN, pos, CNNpadwindow_sz, cos_windowCNNpad, indLayers);
-                    conv1=(feat{1});    % Ô­±¾ÊÇsingleÀàĞÍµÄconv_1=single(feat{1});ÏÖÔÚ±£³ÖÔ­Êı£¡
+                    conv1=(feat{1});    % åŸæœ¬æ˜¯singleç±»å‹çš„conv_1=single(feat{1});ç°åœ¨ä¿æŒåŸæ•°ï¼
                     conv2=(feat{2});
                     conv3=(feat{3});
                     tempCNN1 = (conv1(:,:,1:512));
                     tempCNN2 = (conv2(:,:,1:512));
                     tempCNN3 = (conv3(:,:,1:256));
-                    tempCNN1feat= reshape(tempCNN1, [size(tempCNN1, 1)*size(tempCNN1, 2), size(tempCNN1, 3)]);  % ÖØËÜ³É2Î¬
+                    tempCNN1feat= reshape(tempCNN1, [size(tempCNN1, 1)*size(tempCNN1, 2), size(tempCNN1, 3)]);  % é‡å¡‘æˆ2ç»´
                     tempCNN2feat= reshape(tempCNN2, [size(tempCNN2, 1)*size(tempCNN2, 2), size(tempCNN2, 3)]);
                     tempCNN3feat= reshape(tempCNN3, [size(tempCNN3, 1)*size(tempCNN3, 2), size(tempCNN3, 3)]);
                     featreduce=cell(3,1);
@@ -465,7 +467,7 @@ function [positions, time] = tracker_LTBCCF(video, video_path, img_files, pos, t
                         end
                  
                         CNNf_proj{ii} = fft2(feature_projection([],CNN_num{ii},projection_matrixnn{ii},cos_windowCNNpad));
-                        CNNf_num{ii} = bsxfun(@times, CNNpadyf, conj(CNNf_proj{ii}));                % ½µÎ¬ºóµÄÉî¶ÈÌØÕ÷·Ö×Ó
+                        CNNf_num{ii} = bsxfun(@times, CNNpadyf, conj(CNNf_proj{ii}));                % é™ç»´åçš„æ·±åº¦ç‰¹å¾åˆ†å­
         
                         CNN_den{ii} = feature_projection([], featreduce{ii}, projection_matrixnn{ii}, cos_windowCNNpad);
                         CNNf_den{ii} = fft2(CNN_den{ii});        
