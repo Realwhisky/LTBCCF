@@ -26,7 +26,7 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
 
 
 
-(Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
+                (Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
 
 
 ## Platform
