@@ -29,11 +29,11 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
 
 ## Platform
 
-  Intel i5-8300H  
-  8 GB DDR4 
-  Nvidia GeForce GTX 1060 
-  VS2013 + Mattlab2016a + Cuda7.5 
-  Piotr_toolbox + Vlfeat_toolbox + MatConvNet1.0-beta24 
+    Intel i5-8300H
+    8 GB DDR4
+    Nvidia GeForce GTX 1060
+    VS2013 + Mattlab2016a + Cuda7.5
+    Piotr_toolbox + Vlfeat_toolbox + MatConvNet1.0-beta24 
 
 
 ## EFFECT  
