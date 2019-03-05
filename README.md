@@ -58,4 +58,4 @@ A long-term target tracking method, based on background constraints and convolut
 
 [4] Y. Wu, J. Lim, M.-H. Yang, "Online Object Tracking: A Benchmark", CVPR 2013.Website: http://visual-tracking.net/
 
-[5] P. Dollar, "Piotr's Image and Video Matlab Toolbox (PMT)". Website: http://vision.ucsd.edu/~pdollar/toolbox/doc/index.html
+[5] P. Dollar,"Piotr's Image and Video Matlab Toolbox (PMT)". Website: http://vision.ucsd.edu/~pdollar/toolbox/doc/index.html
