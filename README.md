@@ -24,9 +24,7 @@ Our re-detecting model is based on aCNN model -- VGGNet，this model is pre-trai
 When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution feature map and resize them into same size.After dimension reduction of those features,wo start training mutiple correlation filters,when target is missing,the detector will be actived,and it will working in a bigger search window and find our target again.
 
 
-
-
-                (Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
+    (Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
 
 
 ## Platform
