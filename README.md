@@ -10,21 +10,21 @@ Visual object tracking -- Long-term object tracking method based on background c
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/tracking%20%20stage.png)
 
-From the beginning we get the interest region of one frame from the groundtruth,then extract feature like histogram of gradient（HOG），raw pixel，CN features，after getting those features ,we train Correlation Filter by using the mentioned methed before.when new frame comes,we use filter detect the nearby area and find target position through response map.
+From the beginning we get the interest region of one frame from the groundtruth,then extract feature like histogram of gradient（HOG），raw pixel，CN features，after getting those features ,we train correlation filter by using the mentioned methed before.When the new frame comes,we use filter detect the nearby area and find target position through response map.
 
-During tracking stage,we also train a memory filter in the meantime,memory filter merely learns from core part of search window,we train a  scale filter based this filter.And memory filter can also check whether the tracking was success or not.If failed,the tracker will active detector.
+During tracking stage,we also train a memory filter in the meantime,memory filter merely learns from core part of search window,we train a scale filter based this filter.And memory filter can also check whether the tracking was success or not.If failed,the tracker will active detector.
 
 
 ## Detecting stage
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/detecting%20stage.png)
 
-Our re-detecting model is based on aCNN model -- VGGNet，this model is pre-trained on ImageNet and Coco dataset.We use this model for feature extarcting.
+Our re-detecting model is based on a CNN model --- VGGNet，this model is pre-trained on ImageNet and Coco dataset.We use this model for feature extarcting.
 
-When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution feature map and resize them into same size.After dimension reduction of those features,wo start training mutiple correlation filters,when target is missing,the detector will be actived,and it will working in a bigger search window and find our target again.
+When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution feature map and resize them into same size.After dimension reduction of those features,we start training mutiple correlation filters,when target is missing,the detector will be actived,and it will working in a bigger search window and find our target again.
 
 
-    (Besides better anti-occlusion performance, it is real-time with a average speed of 35.4FPS)
+    (Besides better anti-jamming performance, it is real-time with a average speed of 35.4FPS)
 
 
 ## Platform
