@@ -46,3 +46,16 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
 
 
 A long-term target tracking method, based on background constraints and convolutional fea-tures(LTBCCF), is proposed to solve the target loss problem caused by background aliasing and oc-clusion in long-term object tracking.Firstly, the feature of input image is fused and dimensionally reduced to enhance the performance of target feature discrimination and reduce the complexity of feature computation. Secondly, background constraints are introduced into the filter training process, which makes the filter more focused on the target response to improve the anti-jamming ability. Finally, by setting memory filter and the Peak to Sidelobe Ratio detection, the tracker can judge whether the target is missing or not. If the target is lost, a convolutional features filter is introduced to re-detect the target. The experimental results on 50 video sequences of Visual Tracking Benchmark dataset show that the proposed algorithm achieves a total accuracy score of 92.1% and a total success rate of 63.6% in complex scenes such as background aliasing, fast motion and severe occlusion. It is superior to most existing tracking algorithms and has a long time robust tracking effect.
+
+
+## References
+
+[1] J. F. Henriques, R. Caseiro, P. Martins, J. Batista, "High-Speed Tracking with Kernelized Correlation Filters",TPAMI 2015.
+
+[2] Martin Danelljan, Gustav Häger, Fahad Khan, Michael Felsberg. "Discriminative Scale Space Tracking",TPAMI 2017. 
+
+[3] Ma C , Huang J B , Yang X , et al. "Hierarchical Convolutional Features for Visual Tracking",ICCV 2015.
+
+[4] Y. Wu, J. Lim, M.-H. Yang, "Online Object Tracking: A Benchmark", CVPR 2013.Website: http://visual-tracking.net/
+
+[5] P. Dollar, "Piotr's Image and Video Matlab Toolbox (PMT)". Website: http://vision.ucsd.edu/~pdollar/toolbox/doc/index.html
