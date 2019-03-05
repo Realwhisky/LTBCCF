@@ -3,39 +3,39 @@
 
 function [feat, pos_samples, labels, weights]=det_samples(im, pos, window_sz, det_config)
 
-w_area=get_subwindow(im, pos, floor(window_sz*1.2));  % »ñµÃ1.2±¶window_sz×Ó´°¿Ú
+w_area=get_subwindow(im, pos, floor(window_sz*1.2));  % èŽ·å¾—1.2å€window_szå­çª—å£
 
-feat=get_feature_detector(w_area, det_config.nbin);   % ´Ó1.2±¶padding´°»ñµÃfeatÌØÕ÷
+feat=get_feature_detector(w_area, det_config.nbin);   % ä»Ž1.2å€paddingçª—èŽ·å¾—featç‰¹å¾
 
-feat=imresize(feat, det_config.ratio, 'nearest');     % feat Êä³öÎªÈýÎ¬µÄÌØÕ÷¾ØÕó
-                                                      % Ê¹ÓÃ'×î½üÁÚ²åÖµ·½·¨¡®£¬½«³¤£¬¿í£¬¸ß ËõÐ¡Îª         ¼´°´Éè¶¨µÄ±ÈÀýËõ·Å
-%config.ratio=sqrt(target_max_win/prod(target_sz));   % ÉèÖÃratioÎª  ¡Ì£þ£¨144/target_sz£©
+feat=imresize(feat, det_config.ratio, 'nearest');     % feat è¾“å‡ºä¸ºä¸‰ç»´çš„ç‰¹å¾çŸ©é˜µ
+                                                      % ä½¿ç”¨'æœ€è¿‘é‚»æ’å€¼æ–¹æ³•â€˜ï¼Œå°†é•¿ï¼Œå®½ï¼Œé«˜ ç¼©å°ä¸º         å³æŒ‰è®¾å®šçš„æ¯”ä¾‹ç¼©æ”¾
+%config.ratio=sqrt(target_max_win/prod(target_sz));   % è®¾ç½®ratioä¸º  âˆšï¿£ï¼ˆ144/target_szï¼‰
 
 % w_area=imresize(w_area, det_config.ratio, 'nearest');
 
-t_sz=det_config.t_sz;                                 % t_sz¶¨ÒåÎªconfig.t_sz=round(target_sz*config.ratio); 
+t_sz=det_config.t_sz;                                 % t_szå®šä¹‰ä¸ºconfig.t_sz=round(target_sz*config.ratio); 
 
 % feat=get_feature_detector(w_area, det_config.nbin); 
 
-sz=size(feat);                                        % ÒòÎªfeatÊÇÒ»¸öÈýÎ¬µÄÌØÕ÷¾ØÕó£¬SZÎªfeatÌØÕ÷¾ØÕóµÄ ³¤ ¿í ¸ß
+sz=size(feat);                                        % å› ä¸ºfeatæ˜¯ä¸€ä¸ªä¸‰ç»´çš„ç‰¹å¾çŸ©é˜µï¼ŒSZä¸ºfeatç‰¹å¾çŸ©é˜µçš„ é•¿ å®½ é«˜
 
 % step=max(floor(min(t_sz)/4),1);
 
 step=1;                 
 
-% ********************************************ÀûÓÃfeatÌØÕ÷£¬k½üÁÚµÄ·½Ê½Éú³Ésample,pos,lables**************************************************
+% *******************************************åˆ©ç”¨featç‰¹å¾ï¼Œkè¿‘é‚»çš„æ–¹å¼ç”Ÿæˆsample,pos,lables*******************************************
 
-feat=im2colstep(feat, [t_sz(1:2), size(feat,3)], [step, step, size(feat,3)]); % °ÑfeatÌØÕ÷¾ØÕóÖØÅÅ£¬°´ÁÐ¶ÁÈ¡
+feat=im2colstep(feat, [t_sz(1:2), size(feat,3)], [step, step, size(feat,3)]); % æŠŠfeatç‰¹å¾çŸ©é˜µé‡æŽ’ï¼ŒæŒ‰åˆ—è¯»å–
 
-[xx, yy]=meshgrid(1:step:sz(2)-t_sz(2)+1,1:step:sz(1)-t_sz(1)+1);        % xxÊÇ¹ØÓÚfeat-winsz-targetszµÄ¾ØÕó£¬yyÍ¬Àí
+[xx, yy]=meshgrid(1:step:sz(2)-t_sz(2)+1,1:step:sz(1)-t_sz(1)+1);        % xxæ˜¯å…³äºŽfeat-winsz-targetszçš„çŸ©é˜µï¼ŒyyåŒç†
 
-weights=fspecial('gaussian',size(xx), 25);             % ·µ»ØÒ»¸ö´øÓÐ±ê×¼²îsigma=25´óÐ¡µÄÐý×ª¶Ô³Æ¸ßË¹µÍÍ¨ÂË²¨Æ÷£¬¸ßË¹È¨ÖØ
+weights=fspecial('gaussian',size(xx), 25);             % è¿”å›žä¸€ä¸ªå¸¦æœ‰æ ‡å‡†å·®sigma=25å¤§å°çš„æ—‹è½¬å¯¹ç§°é«˜æ–¯ä½Žé€šæ»¤æ³¢å™¨ï¼Œé«˜æ–¯æƒé‡
 
 bb_samples=[xx(:), yy(:), ones(numel(xx),1)*t_sz(2), ones(numel(xx),1)*t_sz(1)];
 
 bb_target=[(sz(2)-t_sz(2))/2, (sz(1)-t_sz(1))/2, t_sz(2), t_sz(1)];
 
-labels=get_iou(bb_samples, bb_target);                       % IOU Ñù±¾ÓëÄ¿±êµÄÖØµþ¶È£¬ÓÃÀ´svm·ÖÀà£¿
+labels=get_iou(bb_samples, bb_target);                       % IOU æ ·æœ¬ä¸Žç›®æ ‡çš„é‡å åº¦ï¼Œç”¨æ¥svmåˆ†ç±»ï¼Ÿ
 
 yy=(yy+t_sz(1)/2-sz(1)/2)/det_config.ratio;                  
 yy=yy(:)+pos(1);
@@ -43,23 +43,23 @@ yy=yy(:)+pos(1);
 xx=(xx+t_sz(2)/2-sz(2)/2)/det_config.ratio;                  
 xx=xx(:)+pos(2);
 
-pos_samples=[yy' ; xx'];                                     % K½üÁÚÎ»ÖÃÑù±¾£¬Ïà¶ÔÎ»ÖÃÐÅÏ¢
+pos_samples=[yy' ; xx'];                                     % Kè¿‘é‚»ä½ç½®æ ·æœ¬ï¼Œç›¸å¯¹ä½ç½®ä¿¡æ¯
 
 im_sz=det_config.image_sz;                   
 % target_sz=det_config.target_sz;
 
 % *********************************************************************************************************
 
-idx=yy>im_sz(1) | yy<0 | ...                                 % idx±êÇ©
+idx=yy>im_sz(1) | yy<0 | ...                                 % idxæ ‡ç­¾
     xx>im_sz(2) | xx<0;
 
-feat(:, idx)=[];                                             % Ñù±¾sampleÌØÕ÷   
+feat(:, idx)=[];                                             % æ ·æœ¬sampleç‰¹å¾   
 
-pos_samples(:, idx)=[];                                      % K½üÁÚÑù±¾Î»ÖÃ      bb_samples, bb_target
+pos_samples(:, idx)=[];                                      % Kè¿‘é‚»æ ·æœ¬ä½ç½®      bb_samples, bb_target
 
-labels(idx)=[];                                              % IOU ÖØµþ¶È±êÇ©
+labels(idx)=[];                                              % IOU é‡å åº¦æ ‡ç­¾
 
-weights(idx)=[];                                             % ¸ßË¹È¨ÖØ
+weights(idx)=[];                                             % é«˜æ–¯æƒé‡
 
 end
 
