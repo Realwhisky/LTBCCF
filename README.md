@@ -1,5 +1,5 @@
 # My-LTBCCF-algorithm
-Visual object tracking -- Long-Term object tracking method based on background constraints and convolutional features
+Visual object tracking -- Long-term object tracking method based on background constraints and convolutional features
 
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/demo_girl2.gif)
