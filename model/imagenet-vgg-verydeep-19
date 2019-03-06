@@ -1,1 +1,2 @@
-need to download imagenet-vgg-verydeep-19.mat ;
+Need to download imagenet-vgg-verydeep-19.mat ;
+The vgg-19 can be downloaded from http://www.vlfeat.org/matconvnet/pretrained/. 
