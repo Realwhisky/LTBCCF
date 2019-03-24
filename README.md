@@ -37,7 +37,7 @@ When first frame comes, we use VGGNet to extract the 3rd,4th,5th convolution fea
 
 
 ## Effect  
-(a comparison with other mainstream algorithms)
+(a comparison with other mainstream algorithms)（better effect after buffering completly ... ）
 
 ![demo](https://github.com/Realwhisky/LTBCCF_algorithm/blob/master/utility/demo_girl2.gif)
 
